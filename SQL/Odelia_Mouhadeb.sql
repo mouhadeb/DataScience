@@ -1,6 +1,6 @@
 ---Exercise 2a
 
----Join of table dsuser1.departmetn1 + dsuser1.classroom1 + dsuser1.courses1  
+---Join of table dbo.departmetn1 + dbo.classroom1 + dbo.courses1  
 SELECT a.Course_id, b.Department_name, c.Student_id 
 INTO dsuser1.joinCourse_id_Department_name_Student_id  
 FROM dbo.courses AS a
@@ -189,10 +189,13 @@ INTO dsuser1.joinStudent_id_Degree_Department_Department_name
 FROM dbo.classroom AS a
 INNER JOIN dbo.courses AS b ON a.Course_id = b.Course_id
 INNER JOIN dbo.departments AS c ON b.Department = c.Department_id
- 
+
+
+
 ---Counting number of good student (degee over 80)
-SELECT Department_name, COUNT (Degree)AS Good_student_number,
-100.0* COUNT (Degree)/SUM (COUNT(*)) OVER() AS Good_student_percent	
+SELECT Department_name, SUM (COUNT( *)) OVER() AS total_student,
+COUNT (DISTINCT Student_id)AS Good_student_number,
+100.0* COUNT (DISTINCT Student_id)/SUM (COUNT(*)) OVER() AS Good_student_percent	
 FROM dsuser1.joinStudent_id_Degree_Department_Department_name
 WHERE Degree>80
 GROUP BY Department_name
@@ -200,16 +203,21 @@ GROUP BY Department_name
 
 ---Exercise 2g
 ---Selecting Joined table dsuser1.joinStudent_id_Degree_Department_Department_name
-SELECT * 
+
+SELECT a.Student_id, a.Degree, c.Department_name
 INTO dsuser1.joinStudent_id_Degree_Department_Department_name2
-FROM dsuser1.joinStudent_id_Degree_Department_Department_name
+FROM dbo.classroom AS a
+INNER JOIN dbo.courses AS b ON a.Course_id = b.Course_id
+INNER JOIN dbo.departments AS c ON b.Department = c.Department_id
+
 
 
 ---Counting number of not good student (degee under 60)
-SELECT Department_name, COUNT (Degree) AS Not_Good_student_number,
-100.0* COUNT (Degree)/SUM (COUNT(*)) OVER() AS Not_Good_student_percent	
+SELECT Department_name, SUM(COUNT(*)) OVER() AS Total_studentt,
+COUNT (DISTINCT Student_id) AS Not_Good_student_number,
+100.0* COUNT (DISTINCT Student_id)/ SUM (COUNT(*)) OVER() AS Not_Good_student_percent	
 FROM dsuser1.joinStudent_id_Degree_Department_Department_name2
-WHERE Degree<60
+WHERE Degree < 60
 GROUP BY Department_name
 
 ---Exercise 2h
