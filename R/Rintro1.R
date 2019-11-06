@@ -44,6 +44,8 @@ str(pi)
 
 ### generate a vector of numbers
 v1 <- c(1,2,3,4,5,6)
+v1
+v2 <- c(45,67,9)
 min(v1)
 max(v1)
 mean(v1)
@@ -53,9 +55,9 @@ summary(v1)
 v2 <- c("Yes","No","No","Yes","No","Yes","No","No")
 summary(v2)
 table(v2)
-
+#table is only for character not for number
 ### generating a vector with existing objects
-v3 <- c(a,b,c)
+v3 <- c(a,b,c) # the list take the a b c from up and change it into character instead of number and bool
 v3
 summary(v3)
 table(v3)
@@ -105,9 +107,9 @@ v7 <- 12:24
 v7
 
 # numeric sequence incremented by a specific number
-v8 <- seq(from=10, to=100, by=5)
+v8 <- seq(from=10, to=100, by=5) # by is the jumping
 v8
-v8 <- seq(10,100,5)
+v8 <- seq(10,100,5)# we can do it without (,) but we showld be carfull about the order
 v8
 
 # string sequence
@@ -115,11 +117,13 @@ v9 <- letters
 v10 <- LETTERS
 v9[5]
 v10[1:3]
+v10[c(5,15,22)] # this is the list of the vactor
+
 
 length(v10)
 v10[seq(1,26,3)]
 v10[seq(1,length(v10),3)]
-
+length(v10)
 ### operations on numerical vectors
 a
 a * 2
@@ -141,8 +145,8 @@ a - c(2,4)  ### cycling
 ############################
 
 ## create matrix - input data by row
-m1 <- matrix(c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4), nrow=4, ncol=4, byrow=TRUE)
-dim(m1)
+m1 <- matrix(c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4), nrow=4, ncol=4, byrow=TRUE) #byrow is the order of the matrix if the "true"(defalt) minning that it is row if it is "false" it will order by colum. # the x is the vector in this case is (c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4))
+dim(m1) #dimmantions/shape
 nrow(m1)
 ncol(m1)
 m1
@@ -197,7 +201,7 @@ m1 + as.vector(m2) ## doesn't work
 ## m1 [4x4], m2 [1x4], m3 [4x2]
 m1 * m2  ## doesn't work
 m1 %*% m2 ## this works 
-crossprod(m1,m2)  ## 
+crossprod(m1,m2)  ## check with help
 
 m1 %*% m3
 m2 %*% m3
@@ -214,8 +218,8 @@ matrix(0,ncol=5,nrow=8)
 s <- matrix(c(4,4,-2,2,6,2,2,8,4),3,3)
 s
 
-diag(s)
-diag(diag(s))
+diag(s) # take the "alachson"
+diag(diag(s))# give only the diagon without the rest of the number
 
 ### Identity matrix
 I <- diag(c(1,1,1))
@@ -232,7 +236,7 @@ s %*% solve(s)
 
 ### Matrices can represent bidimentional objects. 
 ### To represent multidimentional object we use arrays
-a1 <- array(1:24, c(3,4,2))
+a1 <- array(1:24, c(3,4,2)) #
 a1
 class(a1)
 str(a1)
@@ -302,12 +306,12 @@ l4$chrlst
 l4[[2]][[1]][2]   # this will return the character "c" from the second object (chrlst)
 
 ### list of lists
-l5 <- list(list(model="2018 Toyota Camry Hybrid", price=32400, mpg=52),
-           list(model="2018 Ford Fusion Hybrid", price=37370 , mpg=42),
-           list(model="2018 Toyota Prius", price=30565 , mpg=52),
-           list(model="2018 Hyundai Ioniq",price=28300, mpg=58),
-           list(model="2018 Kia Optima Hybrid",price=35210, mpg=43),
-           list(model="2018 Ford C-Max Hybrid",price=27275, mpg=40)
+l5 <- list(a1=list(model="2018 Toyota Camry Hybrid", price=32400, mpg=52),
+           a2=list(model="2018 Ford Fusion Hybrid", price=37370 , mpg=42),
+           a3=list(model="2018 Toyota Prius", price=30565 , mpg=52),
+           a4=list(model="2018 Hyundai Ioniq",price=28300, mpg=58),
+           a5=list(model="2018 Kia Optima Hybrid",price=35210, mpg=43),
+           a6=list(model="2018 Ford C-Max Hybrid",price=27275, mpg=40)
       )
 
 l5
@@ -315,7 +319,7 @@ class(l5)
 str(l5)
 summary(l5)
 
-l5$model
+l5[[1]]$model
 l5[1]
 l5[[1]]
 l5[[2]]
@@ -342,7 +346,7 @@ l6$vector_list
 l6$matrix_list
 l6$n
 
-
+l6$vector_li
 
 
 ##########################
@@ -356,17 +360,19 @@ a <- c(1,2,3,4,5,6,7,8)
 b <- c("a","b","c","d","e","f","g","h")
 c <- c(TRUE,FALSE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE)
 d <- c(24.233,1.45,10,83.62234,333.02,0.001,2.1,0.1001)
-df <- data.frame(a,b,c,d)
+df <- data.frame(a,b,c,d)# each of the a-d is a colum
 
+#if we want to look at the table we write View(df)
+View(df)
 class(df)
 str(df)
 summary(df)
 
 ### Subseting a data.frame
-df[3,]
-df[,3]
+df[3,] # give the row3 with all the colum
+df[,3] # give the colum3 with all the row
 
-df$c
+df$c #give all the values in c 
 df$b
 
 df.false <- subset(df, c==FALSE)
@@ -378,7 +384,7 @@ df
 
 ### deleting parts of the data frame
 df$c <- NULL
-df[,-3]
+df[,-3] # it delet the values in the column just in the look not realy in contrast to df$c <- NULL 
 
 df[-5,]
 
@@ -417,17 +423,26 @@ a
 b <- as.Date(a)
 b
 
+#if we want dataset to practis we do:
+datasets::mtcars
+
 ### missing values
 c <- NA
 is.na(c)
 
 ### NULL deletes a column in a data frame 
 df <- mtcars
+View(mtcars)
+#if we want to knoew about the database we write:
+?mtcars
+
 df$mpg <- NULL
 
-set.seed(4)
+
+
+set.seed(4)#give random numbers but block it and the number 4 dosent matter
 names.vec <- c('Avi', 'Ben', 'Gad', 'Dan', 'Harel', 'Vered', 'Zelig')
-ages.vec <- sample(25:35, size=7, replace=T)
+ages.vec <- sample(25:35, size=7, replace=T)#sample guve each time random numbers.
 is.married.vec <- sample(c(T, F), size=7, replace=T)
 cities = c('Jerusalem', 'Tel Aviv', 'Haifa')
 city.vec <- sample(cities, size=7, replace=T, prob=c(0.6, 0.3, 0.1))
