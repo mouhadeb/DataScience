@@ -146,24 +146,34 @@ floor(pi)# give the down value
 ls()  ## show all the available objects existing in the "Global environment". 
 rm("C")  ## remove the C object
 
-getwd()  ## get the working directory
+getwd()  ## get the working directory in the files
 setwd("/home/karpati/Rintro/")  ## set the working directory to the specified path
 
 dt <- Sys.time()  ## get system date-time
 
 dt
+format(dt,format="%d-%m-%Y")  ## date format: '22-10-2014'  we should be carfll not to use the M, it will give the minutes
+format(dt,format="%m/%d/%y")  ## date format: '10/22/2014'  "y" gives the years WO the 2000
 format(dt,format="%d-%m-%Y")  ## date format: '22-10-2014'
-format(dt,format="%m/%d/%Y")  ## date format: '10/22/2014'
 format(dt,format="%H:%M")     ## time format: '17:05'
 format(dt,format="%I:%M %p")  ## time format: '05:05 PM'
 
 timestamp()
 date()
 
+# to invert string into date
+
+d3<- "10-02-2015"
+class(d3)
+d4<-as.Date(d3,format = "%d-%m-%Y")
+d4
+class(d4)
+
+
 ### Sequences
 1:10
 seq(1,10,2)
-rep(0.5, 10)
+rep(0.5, 10)# repeat 0.5 *10 times
 length(c(1,2,3,4,5,6,7,8,9,10))
 
 ### randomization
@@ -182,12 +192,21 @@ for (n in 1:4) {
   print(sample(c(1,2,3,4,5,6,7,8,9,10),3))
 }
 
+
+
 runif(n=10, min=0, max=1)  ## 10 random numbers between 0 and 1
+
+set.seed(124)
 runif(n=5, min=-3, max=3)  ## 3 random numbers between -3 and 3
 
-## normal distribution
-rnorm(n=10, mean=5, sd=2)
+round(runif(n=10, min=0, max=10),0)# in order to get round numbers
 
+## normal distribution
+rnorm(n=1000, mean=5, sd=2)# gives random numbers wich are normally distributed
+#if we want to know if the numbers are normally distributed
+rnorm(n=1000, mean=5, sd=2)
+rnd<-rnorm(n=1000, mean=5, sd=2)
+rnd<-runif
 ## binomial distribution
 rbinom(n=10, size=1, prob=0.4)
 
@@ -222,25 +241,30 @@ c == d
 
 cities = c('Jerusalem', 'Tel Aviv', 'Haifa')
 
-'Jerusalem' %in% cities
+'Jerusalem' %in% cities # in order to know if a value is in the vector in boolean
 'Holon' %in% cities
 
 !('Jerusalem' %in% cities)  ## not in
 !('Holon' %in% cities)      ## not in
 
 ############################################
-### Apply and friends
+### Apply (apply is a family. and is similar to map in python) and friends
 ############################################
 
-### apply: apply a function recursively on a matrix or array
+### apply: apply a function recursively on a matrix or array 
+
+#apply: (matrix,[1,2],function)
+#sapply: (vector or df, function)
+#lapply: (list,function)
+
 ### MARGIN: how to apply the functions. 1=by rows, 2=by columns
 ### FUN: the function to apply. 
 m1 <- matrix(c(rep(1,5),rep(2,5),rep(3,5),rep(4,5),rep(5,5)),ncol=5,byrow=T)
 m1
 apply(X = m1, MARGIN = 1, FUN = sum)
 apply(X = m1, MARGIN = 2, FUN = sum)
-
-
+#in short way is:
+apply(m1,  2, sum)
 ############
 #### lapply: apply a function recursively on a list.. the result will be a list
 ############
@@ -252,15 +276,16 @@ l1
 
 
 lapply(l1, sum)
+lapply(l1,colSums)#GIVES the sum of the column of each matrix
 ### We can use the selection operator `[` for extracting values at the same position
 ### Get the element of the third column of each element of a list 
-lapply(l1, "[",,3)  
+lapply(l1, "[",,3) #   "[" is a function that gives a column or a row from the list 
 
 ### Get the element of the first row of each element of a list 
-lapply(l1, "[",1,)  
+lapply(l1, "[",1,)  #   "[" is a function
 
 ###########
-### sapply: like lapply, but tries to simplify the output
+### sapply: like lapply, but tries to simplify the output. the result is not 
 ### 
 ###########
 l1
@@ -291,7 +316,7 @@ m1 == m2
 mapply(rep, LETTERS[1:6], 4, SIMPLIFY = FALSE)
 
 ### what will this generate?
-mapply(rep, LETTERS[1:6], 6:1, SIMPLIFY = FALSE)
+mapply(rep, LETTERS[1:6], 6:1, SIMPLIFY = FALSE) #the true stay it matrix
 
 #####################################################################
 ############  Programming with R
@@ -307,16 +332,59 @@ y <- 0
 if( x > 1 ) { y = 3 }
 c(x,y)
 
+#another way:
+if(x>1){
+  y=3
+}
+
 ###  if (condition) { ... } else { ... }
 x <- 5
 y <- 0
 if( x > 5 ) { y = 10 } else { y = 5 }
 c(x,y)
 
+
+# the same:
+if( x > 5 ) { 
+  y = 10 
+} else { 
+    y = 5 }
+c(x,y)
+
+
+
+x <- 5
+y <- 0
+
+if( x > 5 ) { 
+  y = 10 
+} else if (x>3) {
+  y=2
+}else{
+  y = 5 
+}
+c(x,y)
+
+
+
 ###  ifelse(condition, value1, value2) 
 x <- 5
 y <- ifelse(x > 5, 10, 5)
 c(x,y)
+
+
+if (x>5){
+  y=10
+}else{
+  y=5
+}
+c(x,y)
+
+
+
+x <- 5
+y <- ifelse(x > 5, 10, ifelse(x>3,3,5))
+c(x)
 
 ###################################
 ### Recursive
@@ -350,11 +418,7 @@ while(x < 5) {
 
 
 ### permanent recursion
-x <- 0
-while(TRUE) {
-  x <- x + 1
-  print(x)
-}
+x<-0
 ## how can we prevent it from running infinitely? 
 
 ## repeat works like the last while example.
