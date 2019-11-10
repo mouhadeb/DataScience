@@ -26,7 +26,7 @@ max(df$price)
 mean(df$price)
 sd(df$price)
 median(df$price)
-quantile(df$price,c(0.1,0.25,0.75,0.9))
+quantile(df$price,c(0.1,0.25,0.75,0.9))#we can define the percentage
 sum(df$price)
 
 ########################
@@ -37,14 +37,14 @@ a <- c(10, 25, 8, 33, 12, 4, 28, 9, 11, 22)
 b <- c(20, 30, 33, 28, 34, 21, 26, 29, 20, 25)
 
 ### bind rows
-c <- rbind(a,b)
+c <- rbind(a,b) # connect vectors by rows and we create matrica
 c
 class(c)
 str(c)
 dim(c)
-rownames(c)
+rownames(c)# the name of the rows
 
-### bind columns
+### bind vectors by columns
 d <- c("Yes","No","No","Yes","Yes","Yes","No","No","Yes","No")
 
 e <- cbind(a,b,d)
@@ -56,17 +56,18 @@ colnames(e)
 
 #### add a new column
 df
+
 df2 <- cbind(df, available=c(TRUE,FALSE,TRUE,TRUE,TRUE,FALSE))
 df2
 class(df2)
 str(df2)
 summary(df2)
-names(df2)
+names(df2)# in order to know the column names
 
-## alternative way
+## alternative way to add new column
 df2$available <- c(TRUE,FALSE,TRUE,TRUE,TRUE,FALSE)
 
-### concatenate strings
+### concatenate strings. paste add and bind str
 s1 <- paste("I","love","data","science")
 s1
 class(s1)
@@ -81,6 +82,9 @@ summary(s2)
 
 
 s3 <- c("I","love","data","science")
+s10 <-c("x1","x2", "x3", "x4")
+s11<-paste("y",paste(s10,colapse="+"),sep = "~")
+
 
 s4 <- paste(s1,collapse=" ")
 s4
@@ -93,7 +97,7 @@ s5
 class(s5)
 str(s5)
 
-s6 <- paste0("I","love","data","science")
+s6 <- paste0("I","love","data","science")# add without the " "
 s6
 class(s6)
 str(s6)
@@ -117,7 +121,7 @@ exp(d3)
 log10(d1) ## decimal logarithm
 
 d4 <- c(-5,-4,-3,-2,-1, 0, 1, 2, 3, 4, 5)
-sign(d4)
+sign(d4) #gives only the 0 for the positive and -1 for the negative
 abs(d4)
 
 ### geometric transformations
@@ -128,18 +132,18 @@ tan(c(10,30,90,180))
 ### other
 pi <- 3.1415927
 round(pi)
-round(pi,1)
+round(pi,1) # it decides how many nambers after the dot.
 round(pi,2)
 round(pi,4)
 
-ceiling(pi)
-floor(pi)
+ceiling(pi)# give the upper value
+floor(pi)# give the down value
 
 ##############################################################
 ###   SYSTEM FUNCTIONS
 ##############################################################
 
-ls()  ## show all the available objects existing in the environment
+ls()  ## show all the available objects existing in the "Global environment". 
 rm("C")  ## remove the C object
 
 getwd()  ## get the working directory
