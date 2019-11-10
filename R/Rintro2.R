@@ -417,8 +417,7 @@ while(x < 5) {
 
 
 
-### permanent recursion
-x<-0
+
 ## how can we prevent it from running infinitely? 
 
 ## repeat works like the last while example.
