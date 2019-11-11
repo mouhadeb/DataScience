@@ -2,15 +2,21 @@
 
 ---Join of table dbo.departmetn1 + dbo.classroom1 + dbo.courses1  
 SELECT a.Course_id, b.Department_name, c.Student_id 
-INTO dsuser1.joinCourse_id_Department_name_Student_id  
+INTO dbo.joinCourse_id_Department_name_Student_id  
 FROM dbo.courses AS a
-INNER JOIN dbo.departments AS b ON a.Department = b.Department_id
+INNER JOIN dbo.departments AS b ON a.Department_id = b.Department_id
 INNER JOIN dbo.classroom AS c ON a.Course_id = c.Course_id
-SELECT * FROM dsuser1.joinCourse_id_Department_name_Student_id  
+SELECT * FROM dbo.joinCourse_id_Department_name_Student_id  
+
+DROP TABLE dbo.joinCourse_id_Department_name_Student_id  
+
+
+
+
 
 ---Counting number of student in each department
 SELECT Department_name, COUNT(DISTINCT Student_id) AS Total_Student_indepartment
-FROM dsuser1.joinCourse_id_Department_name_Student_id 
+FROM dbo.joinCourse_id_Department_name_Student_id 
 GROUP BY Department_name
 ORDER BY Total_Student_indepartment
 
