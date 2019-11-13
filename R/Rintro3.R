@@ -130,7 +130,7 @@ ggplot(data=iris3) +
 
 ### define the transparency by species
 ggplot(data=iris3) +
-  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, alpha=Species, color=Species))
+  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, alpha=Species, color=Species))#alpha is the darkness of color
 
 
 ### define size by Species 
@@ -139,21 +139,22 @@ ggplot(data=iris3) +
 
 ### define stroke by Petal.Width (doesn't work with factors)
 ggplot(data=iris3) +
-  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, stroke=Petal.Length, 
+  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, stroke=Petal.Length, #strok change the size of the category in this case by the size of the Pethal.Length(works only on numeric values)
                            color=Species))
 
 ### combining many properties in one graph
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, 
                            color=Species,shape=Species, 
-                           alpha=Species, size=as.numeric(Species)))
+                           alpha=0.5, size=as.numeric(Species)))#size works only on numeric values
 
-########## Separate graphs for each class: Facets
+########## Separate graphs for each class: Facets (facet_wrap) by categorial
 
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio)) +
-  facet_wrap(~ Species, nrow = 1) 
+  facet_wrap(~ Species, nrow = 1)#nrow is the number of sheets 
 
+# in the case of facet_grid we need to change into integer
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, col=Species)) +
   facet_grid(round(Sepal.Length,0) ~ round(Petal.Length,0))
@@ -179,7 +180,7 @@ ggplot(data = iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species)) +
   geom_smooth(mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species))
 
-### Positioning the mapping in the initial graph definition
+### Positioning the mapping in the initial graph definition . another way
 ggplot(data = iris3, mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species)) + 
   geom_point() +
   geom_smooth()
@@ -199,8 +200,10 @@ ggplot(data = iris3, mapping = aes(x = Sepal.ratio, y = Petal.ratio)) +
 ggplot(data = iris3) + 
   geom_histogram(mapping = aes(x=Sepal.Length))
 
+hist(iris3$Sepal.Length)
+
 ggplot(data = iris3,mapping = aes(x=Sepal.Length)) + 
-  geom_histogram(bins = 30)
+  geom_histogram(bins = 30)# we can change the number
 
 ### Bar graph
 iris3 <- iris3 %>%
@@ -216,7 +219,7 @@ ggplot(data = iris3) +
 
 #### stacked bars
 ggplot(data = iris3) + 
-  geom_bar(mapping = aes(x=Sepal.Length.cat, fill=Species), position = "fill" )
+  geom_bar(mapping = aes(x=Sepal.Length.cat, fill=Species), position = "fill" )# show by %
 
 ### Dodge
 ggplot(data = iris3) + 
@@ -228,7 +231,7 @@ ggplot(data = iris3) +
 
 ggplot(data = iris3) + 
   geom_boxplot(mapping = aes(x=Species,y=Sepal.ratio)) +
-  coord_flip()
+  coord_flip()#change the axes graph 
 
 ##################################
 #####  Extended layered grammar
