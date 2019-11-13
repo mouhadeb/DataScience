@@ -6,20 +6,20 @@
 ##########  dplyr
 ##############################
 
-library(dplyr)
+library(dplyr) #donot work on vector only on df. when we import data we should select the From Text (readr) and it will otomatically use the dplyr
 
 #### transform a data.frame into a dplyr compatible data table
 class(iris)
 
-iris2 <- as_data_frame(iris)   ## function imported to dplyr from the 'tibble' package
+iris2 <- as_data_frame(iris)   ## function imported to dplyr from the 'tibble' package. when the data is big
 
 class(iris2)
 
 iris
 iris2
-
-#### selection of columns
-iris2 %>% select(Sepal.Length, Sepal.Width)
+head(iris2)
+#### selection of columns . we use the %>% in dplyr in order to do secuence of function
+iris2 %>% select(Sepal.Length, Sepal.Width) # %>% in order to move to the result and if at the end there is another %>% it will move the result to the next 
 
 ### selection of rows using a condition
 iris2 %>% filter(Species=="setosa")
@@ -29,7 +29,7 @@ iris2 %>% mutate(Sepal.ratio = Sepal.Length/Sepal.Width,
                  Petal.ratio = Petal.Length/Petal.Width)
 
 
-### summarise (summarize)
+### summarise (summarize) in mean we have to remove the nall (na.rm=T)
 iris2 %>% summarise(Sepal_len_mean=mean(Sepal.Length,na.rm=T), 
                     Petal_len_mean=mean(Petal.Length,na.rm=T))
 
@@ -57,15 +57,18 @@ iris3
 iris3 %>%
   arrange(Sepal.Length)
 
+
+#the oposite order
 iris3 %>%
   arrange(desc(Petal.Width))
 
 #### counting
-iris3 %>% tally()
+iris3 %>% tally()#gives the number of the rows
 
 iris3 %>% group_by(Species) %>% tally()
 
 iris3 %>% group_by(Species) %>% summarise(cnt = n())
+
 
 ######## complex transformation
 ### Get the minimum, maximum and average of the height and mass, the count and the 
@@ -84,7 +87,7 @@ mysw <- starwars %>%
          nogender = ifelse(is.na(gender)==T,1,0),
          attack_of_clones = ifelse("Attack of the Clones" %in% films,1,0)) %>%
   filter(attack_of_clones == 1) %>%
-  summarise(height_min=min(height,na.rm=TRUE),
+  summarise(height_min=min(height,na.rm=TRUE),   # we will se in the table only from the summarize
             height_mean=mean(height,na.rm=TRUE),
             height_max=max(height,na.rm=TRUE),
             mass_min=min(mass,na.rm=TRUE),
