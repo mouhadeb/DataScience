@@ -6,20 +6,20 @@
 ##########  dplyr
 ##############################
 
-library(dplyr)
+library(dplyr) #donot work on vector only on df. when we import data we should select the From Text (readr) and it will otomatically use the dplyr
 
 #### transform a data.frame into a dplyr compatible data table
 class(iris)
 
-iris2 <- as_data_frame(iris)   ## function imported to dplyr from the 'tibble' package
+iris2 <- as_data_frame(iris)   ## function imported to dplyr from the 'tibble' package. when the data is big
 
 class(iris2)
 
 iris
 iris2
-
-#### selection of columns
-iris2 %>% select(Sepal.Length, Sepal.Width)
+head(iris2)
+#### selection of columns . we use the %>% in dplyr in order to do secuence of function
+iris2 %>% select(Sepal.Length, Sepal.Width) # %>% in order to move to the result and if at the end there is another %>% it will move the result to the next 
 
 ### selection of rows using a condition
 iris2 %>% filter(Species=="setosa")
@@ -29,7 +29,7 @@ iris2 %>% mutate(Sepal.ratio = Sepal.Length/Sepal.Width,
                  Petal.ratio = Petal.Length/Petal.Width)
 
 
-### summarise (summarize)
+### summarise (summarize) in mean we have to remove the nall (na.rm=T)
 iris2 %>% summarise(Sepal_len_mean=mean(Sepal.Length,na.rm=T), 
                     Petal_len_mean=mean(Petal.Length,na.rm=T))
 
@@ -57,15 +57,18 @@ iris3
 iris3 %>%
   arrange(Sepal.Length)
 
+
+#the oposite order
 iris3 %>%
   arrange(desc(Petal.Width))
 
 #### counting
-iris3 %>% tally()
+iris3 %>% tally()#gives the number of the rows
 
 iris3 %>% group_by(Species) %>% tally()
 
 iris3 %>% group_by(Species) %>% summarise(cnt = n())
+
 
 ######## complex transformation
 ### Get the minimum, maximum and average of the height and mass, the count and the 
@@ -84,7 +87,7 @@ mysw <- starwars %>%
          nogender = ifelse(is.na(gender)==T,1,0),
          attack_of_clones = ifelse("Attack of the Clones" %in% films,1,0)) %>%
   filter(attack_of_clones == 1) %>%
-  summarise(height_min=min(height,na.rm=TRUE),
+  summarise(height_min=min(height,na.rm=TRUE),   # we will se in the table only from the summarize
             height_mean=mean(height,na.rm=TRUE),
             height_max=max(height,na.rm=TRUE),
             mass_min=min(mass,na.rm=TRUE),
@@ -127,7 +130,7 @@ ggplot(data=iris3) +
 
 ### define the transparency by species
 ggplot(data=iris3) +
-  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, alpha=Species, color=Species))
+  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, alpha=Species, color=Species))#alpha is the darkness of color
 
 
 ### define size by Species 
@@ -136,21 +139,22 @@ ggplot(data=iris3) +
 
 ### define stroke by Petal.Width (doesn't work with factors)
 ggplot(data=iris3) +
-  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, stroke=Petal.Length, 
+  geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, stroke=Petal.Length, #strok change the size of the category in this case by the size of the Pethal.Length(works only on numeric values)
                            color=Species))
 
 ### combining many properties in one graph
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, 
                            color=Species,shape=Species, 
-                           alpha=Species, size=as.numeric(Species)))
+                           alpha=0.5, size=as.numeric(Species)))#size works only on numeric values
 
-########## Separate graphs for each class: Facets
+########## Separate graphs for each class: Facets (facet_wrap) by categorial
 
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio)) +
-  facet_wrap(~ Species, nrow = 1) 
+  facet_wrap(~ Species, nrow = 1)#nrow is the number of sheets 
 
+# in the case of facet_grid we need to change into integer
 ggplot(data=iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, col=Species)) +
   facet_grid(round(Sepal.Length,0) ~ round(Petal.Length,0))
@@ -176,7 +180,7 @@ ggplot(data = iris3) +
   geom_point(mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species)) +
   geom_smooth(mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species))
 
-### Positioning the mapping in the initial graph definition
+### Positioning the mapping in the initial graph definition . another way
 ggplot(data = iris3, mapping = aes(x = Sepal.ratio, y = Petal.ratio, color=Species)) + 
   geom_point() +
   geom_smooth()
@@ -196,8 +200,10 @@ ggplot(data = iris3, mapping = aes(x = Sepal.ratio, y = Petal.ratio)) +
 ggplot(data = iris3) + 
   geom_histogram(mapping = aes(x=Sepal.Length))
 
+hist(iris3$Sepal.Length)
+
 ggplot(data = iris3,mapping = aes(x=Sepal.Length)) + 
-  geom_histogram(bins = 30)
+  geom_histogram(bins = 30)# we can change the number
 
 ### Bar graph
 iris3 <- iris3 %>%
@@ -213,7 +219,7 @@ ggplot(data = iris3) +
 
 #### stacked bars
 ggplot(data = iris3) + 
-  geom_bar(mapping = aes(x=Sepal.Length.cat, fill=Species), position = "fill" )
+  geom_bar(mapping = aes(x=Sepal.Length.cat, fill=Species), position = "fill" )# show by %
 
 ### Dodge
 ggplot(data = iris3) + 
@@ -225,7 +231,7 @@ ggplot(data = iris3) +
 
 ggplot(data = iris3) + 
   geom_boxplot(mapping = aes(x=Species,y=Sepal.ratio)) +
-  coord_flip()
+  coord_flip()#change the axes graph 
 
 ##################################
 #####  Extended layered grammar

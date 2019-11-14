@@ -131,4 +131,26 @@ c<-NULL
 for (i in 1:5) {
   c <- paste(c,paste(a[i],b[i]))
 }
-c"
+
+
+
+
+# exersize dplry
+library(dplyr)
+
+nasa1 <- as_data_frame(nasa)
+
+nasa1 %>% filter(lat>29.56 & lat<33.09 & long< -90.55 & long> -110.93) %>%
+  mutate(Temp_retio = temperature / surftemp) %>%
+  group_by(year)%>%
+  summarise(pressure_mean=mean(pressure,na.rm = TRUE),
+            pressure_sd=sd(pressure,na.rm = TRUE),
+            ozone_mean=mean(ozone,na.rm = TRUE),
+            ozone_sd=sd(ozone,na.rm = TRUE),
+            Temp_retio_mean=mean(Temp_retio,na.rm = TRUE),
+            Temp_retio_sd=sd(Temp_retio,na.rm = TRUE))%>%
+  arrange(desc(ozone_mean))
+
+
+
+

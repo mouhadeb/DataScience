@@ -444,8 +444,9 @@ y <- x + 15
 
 plot(x, y) 
 
-plot(x ~ y)  ## what happen with the axes?
-lines(x ~ y)
+plot(y ~ x)  ## what happen with the axes? reverse
+lines(y ~ x)
+
 
 plot(x, y, type='o') ## points and lines
 plot(x, y, type='p') ## points
@@ -459,7 +460,7 @@ plot(x, y, type='n') ## no dots or lines
 plot(iris$Sepal.Length ~ iris$Sepal.Width)
 ## lets add to the graph a vertical line at the mean septal lenght
 abline(h=mean(iris$Sepal.Length), col="red")
-## and an horizontal line at the mean septal with
+## and an horizontal line at the mean septal with. we can change the color 
 abline(v=mean(iris$Sepal.Width), col="red")
 
 ##############################
@@ -467,7 +468,7 @@ abline(v=mean(iris$Sepal.Width), col="red")
 ##############################
 
 ### defining the x and y limits
-plot(x=NULL, xlim=c(1,10), ylim=c(1,11))
+plot(x=NULL, xlim=c(1,10), ylim=c(0,11))
 
 ### line width
 y <- 1 
@@ -476,7 +477,7 @@ for(n in seq(0.5,5,0.5)) {
   y <- y + 1
 }
 ### write the values of the line width 0.2 points over the line
-text(x=rep(3,9),y = seq(1.2,10.2,1),labels = paste("lwd=",seq(0.5,5,0.5)))
+text(x=rep(3,9),y = seq(1.5,10.3,1),labels = paste("lwd=",seq(0.5,5,0.5)))
 
 
 ### line type (6 types)
@@ -492,14 +493,18 @@ text(x=rep(3,6),y = seq(1.2,6.2,1),labels = paste("lty=",1:6))
 ### point symbols: there are 35, 25 accessible by numbers (1-25) and 10 accessible by 
 ### symbols ('*','+','-','.','|','%','#','o','O','0')
 
-plot(x=NULL, xlim=c(1,5), ylim=c(0,6), xlab="X", ylab="Y")
-for(x in 1:5) {
+plot(x=NULL, xlim=c(1,5), ylim=c(0,6), xlab="X") #give a name to the axes, ylab="Y"
+for(x in 1:5) {#givs in each axes5 shaps at each piont
   for(y in 1:5) {
     p <- y+(5*(x-1))
-    points(x,y,pch=p)
+    points(x,y,pch=p)#pch is a singal shape but the loop give all the shapes
     text(x,y+0.2,labels=paste("pch=",p),cex=0.7)
   }
 }
+points(1,1,pch=1)
+points(1,2,pch=2)
+points(1,5,pch=3)
+
 
 
 q <- c('*','+','-','.','|','%','#','o','O','0')
@@ -508,13 +513,13 @@ for(x in 1:2) {
   for(y in 1:5) {
     p <- y+(2*(x-1))
     points(x,y,pch=q[p])
-    text(x,y+0.2,labels=paste("pch=",q[p]),cex=0.7)
+    text(x,y+0.2,labels=paste("pch=",q[p]),cex=0.7) # cex is the size of the letter
   }
 }
 
 #### symbols from 21 to 25 may be drawn in different colors:
 
-cl <- 2:5
+cl <- 2:5 # we can change only the empty shapse and we defined theiir places
 gr <- 21:25
 plot(x=NULL, xlim=c(1,4), ylim=c(0,5), xlab="X", ylab="Y")
 for(x in 1:4) {
@@ -526,22 +531,25 @@ for(x in 1:4) {
 }
 
 ### barplot
-barplot(df$mpg)
+barplot(mtcars$mpg)
+barplot(table(mtcars$cyl))
 
 ### histograms and boxplots
 x <- rnorm(400, mean=40, sd=15)
 hist(x)
-y <- rbinom(1:400, 2, 0.3)
+summary(x)
+y <- rbinom(1:400, 2, 0.3)#binomial 
 summary(y)
 table(y)
+hist(y)#we canot do hist becase it is not normal distribution
 boxplot(x ~ y)
 
-t1 <- table(v2)
+t1 <- table(y)
 t1
 pie(t1)
 
-scatter.smooth(x)
-
+scatter.smooth(x)# help to see distribution
+scatter.smooth(x,col=y+1)
 ### adding color to a plot
 mycol <- ifelse(x >44,"red","blue")
 scatter.smooth(x, col=mycol)
@@ -562,7 +570,7 @@ legend(x="bottomright",
        horiz = T)
 
 ### ploting many graphics at once
-par(mfrow=c(2,2))
+par(mfrow=c(2,2))# 2,2 is the number of plot in the fild
 cl <- as.numeric(iris$Species)
 plot(iris$Sepal.Length, main="Septal Lenght",col=cl)
 plot(iris$Sepal.Width, main="Septal Width",col=cl)
