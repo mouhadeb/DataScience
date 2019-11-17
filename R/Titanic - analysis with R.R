@@ -5,17 +5,21 @@ library(dplyr)
 library(ggplot2)
 
 ### Import the titanic dataset
-titanic <- read.csv(paste(path,"../data/titanic.csv",sep="/"))
+
+titanic <- read.csv("../data/titanic.csv")
 head(titanic)
 
 ##################################################
 ### Number of pasangers and how much survived
 ##################################################
-passangers = nrow(titanic)
-survived = sum(titanic['Survived'])
+passangers = nrow(titanic)# count num of 
 
+survived = sum(titanic['Survived'])
+#titanic$Survived  # another way
 print(paste("We have", passangers, "passangers but only", survived, "of them survived (", 
-            survived/passangers*100, "%)"))
+           format(survived/passangers*100,digits=4), "%)"))
+
+
 
 ###################################################
 #### Missing values
@@ -85,7 +89,7 @@ titanic$AgeGroup[which(is.na(titanic$Age)==TRUE)] <- "No Age"
 
 table(titanic$AgeGroup)
 
-### using dplyr and ifelse()
+### using dplyr and ifelse()  in this case we start with the is.na
 titanic <- titanic %>% 
   mutate(AgeGroup= ifelse(is.na(Age)==TRUE, "No Age",
                    ifelse(Age <5, "0-5", 
@@ -132,6 +136,11 @@ titanic %>%
 #######################################
 
 titanic %>% 
+  group_by(Embarked) %>% 
+  summarise(count=n(),survived=sum(Survived),percent=(sum(Survived)/n()*100))
+
+
+titanic %>% filter(Embarked %>% c('C','Q')) %>% # CHECK
   group_by(Embarked) %>% 
   summarise(count=n(),survived=sum(Survived),percent=(sum(Survived)/n()*100))
 
@@ -198,7 +207,7 @@ titanic %>%
 ##  (must be titles), and with them we will create a new column. Then we will procede as 
 ##  we did in the other analyses.
 ############################################
-
+summary(titanic$Name)
 words = paste(titanic$Name, collapse=" ")
 class(words)
 print(words)

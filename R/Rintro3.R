@@ -268,11 +268,12 @@ ggplot(data = iris3) +
 #######################################################################
 
 #### grep
-grep("a", c("abc", "def", "cba a", "aa"), value=FALSE)  ### return indices
-grep("a", c("abc", "def", "cba a", "aa"), value=TRUE)   ### return values
+grep("a", c("abc", "def", "cba a", "aa"), value=FALSE)  ### return indices, gives the index in the vector that contain the "a"
+grep("a", c("abc", "def", "cba a", "aa"), value=TRUE)   ### return values,gives the objects in the vector that contain the "a"
 
-head(colours())
-grep("orange",colours())
+head(colours())   #colors is a function and return the vector
+length(colors())
+grep("orange",colours()) # the defolt is False
 grep("orange",colours(),value=T)
 
 grep("dark",colours())
@@ -282,21 +283,21 @@ grep("dark",colours(),value=T)
 grep("red",colours(),value=T)  ## contains red
 grep("^red",colours(),value=T) ## ^ -> begins with red
 grep("red$",colours(),value=T) ## $ -> ends with red
-grep("red.$",colours(),value=T) ## '.' -> match any single character
+grep("red.$",colours(),value=T) ## '.' -> match any single character. another single value after the red
 grep("^red",colours(),value=T) ## '^' -> begins with red
-grep("^red[2:4]",colours(),value=T) ## [] -> begins with red and has a number of 2 or 4 
-grep("^red[2|4]",colours(),value=T) ## [] -> begins with red and has a number of 3 or 4
+grep("^red[2:4]",colours(),value=T) ## [] -> begins with red and has a number of 2 or 4 (the : meaning "or")
+grep("^red[2|4]",colours(),value=T) ## [] -> begins with red and has a number of 3 or 4 (the | meaning "or")
 grep("^red[2-4]",colours(),value=T) ## [] -> begins with red and has a number between 2 and 4
 
 grep("^red[2:4]|^blue[2:4]",colours(),value=T)  
 
 grep("2|4",colours()[100:150],value=T)  
-grep("[24]",colours()[100:150],value=T)  
+grep("[24]",colours()[100:150],value=T)  # if it is incide [] it will be "or" in this case it is 2 or 4
 
 grep("^[dl].*2$",colours(),value=T)  ## all strings beginin with d or l and ending with 2
 
 #### logical grep
-grepl("a", c("abc", "def", "cba a", "aa"))  ##  value=TRUE is not supported
+grepl("a", c("abc", "def", "cba a", "aa"))  ##  value=TRUE is not supported. grepl returns logic True or False
 grepl("white",colours()[1:20])
 
 #### Find and Replace once
@@ -321,8 +322,7 @@ strsplit(c("abc", "def", "cba a", "aa"),split = "b")
 strsplit(c("The boy is playing with his car, his father is talking on the phone"),split=',')
 
 ### separating by a point
-strsplit(c("The boy is playing with his car. His father is talking on the phone"),split='\\.')
-
+strsplit(c("The boy is playing with his car. His father is talking on the phone"),split='\\.')# in case of "." we have to use the "\\" before
 
 ####################################################
 ############   Functions
@@ -342,7 +342,7 @@ xplusone(20)
 b <- c(1,2,3,4,5)
 xplusone(b)
 
-### beware from reserved words !!!
+### beware from reserved words !!! we can not use the name c because it is a function
 c <- function(x) {
   x + 1
 }
@@ -460,9 +460,11 @@ class(mydata)
 str(mydata)
 
 ####### Excel
+install.packages(("rJava"))# IF IT DOES NOT WORK
+Sys.setenv(JAVA_HOME="")  #AT HOME
 library(xlsx)
 df1 <- read.xlsx("excel-example.xlsx",sheetIndex = 1)
-df2 <- read.xlsx("excel-example.xlsx",sheetIndex = 2)
+df2 <- read.xlsx("excel-example.xlsx",sheetIndex = 2,endRow = 9)# We added the sintacs endRow in order to deleat the extra rows
 
 ### Write a data.frame to an excel file
 write.xlsx(df1, "one-sheet-example.xlsx", sheetName="Data Frame")
@@ -490,18 +492,21 @@ calories <- df2 %>%
 
 file <- "excel-example2.xlsx"
 
-wb <- createWorkbook()
+wb <- createWorkbook()# create an ampty sheets
+#creates sheets
 sheet1 <- createSheet(wb, sheetName="Countries")
 sheet2 <- createSheet(wb, sheetName="Calories")
 sheet3 <- createSheet(wb, sheetName="Diet")
 sheet4 <- createSheet(wb, sheetName="Income")
 
+# Add the tables to the sheets
 addDataFrame(countries,sheet1)
 addDataFrame(calories,sheet2)
 addDataFrame(df1,sheet3)
 addDataFrame(df2,sheet4)
 
-saveWorkbook(wb, file)
+# create the final file
+saveWorkbook(wb, file) 
 
 
 ################################
@@ -568,7 +573,7 @@ json_df <- as.data.frame(json_data)
 #### DATABASE
 ########################
 
-#### To be able to query the database we need to create a new ODBC DNS on the windows computer
+#### To be able to query the database we need to create a new ODBC DNS on the windows computer. in  order to import data from sql
 
 
 library(DBI)
@@ -577,3 +582,20 @@ sql <- "SELECT * FROM acs2015_country_data"
 acs <- dbGetQuery(con, sql)
 dbDisconnect(con)
 
+#for lenox
+library(DBI)
+con <- dbConnect(odbc::odbc(), 
+.connection_string = "Driver={ODBC Driver 17 for SQL Server};
+server=192.168.1.1;
+uid=dsuser01;
+pwd=DSuser01!;")
+
+
+#at home
+library(DBI)
+con <- dbConnect(odbc::odbc(),dsn="Collage;Trusted_Connection=yes;") 
+
+students <- "SELECT * FROM College.dbo.students"
+
+sql <-dbGetQuery(con, sql)
+dbDisconnect(conn)# we must disconnect after
