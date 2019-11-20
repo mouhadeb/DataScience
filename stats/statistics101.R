@@ -13,20 +13,42 @@ x4 <- mtcars$qsec
 ### create a function that shows the most frequent element in a vector. 
 ### If there are more than one element that are the most frequent and has the same count, return all of them
 
+table(x1)
+
 MODE <- function(x) {
   freq <- table(x)
-  Xmo <- names(freq[1])
+  idx <-order(freq,decreasing = T)# here we order 
+  Xmo <- names(freq[idx][1])
     return(Xmo)
 }
 
+
+#explenation :  
+table(x1)
+bb1 <- table(x1)
+bb1
+order(bb1,decreasing = T)#give the index of the dete from 
+bb2 <-order(bb1,decreasing = T) #ordering the data from the very frequent to the less
+names(bb1)[bb2][1]# gives the name or the numbers which is the first in the index instead of the index
+
+
+MODE(x1)
+MODE(x2)
+MODE(x3)
+
+
+
 ### create a function that shows the median of a given vector. 
 
-MEDIAN <- function(x) {
-  x <- x[order(x)]
-  idx <- length(x)/2
-  Xme <- (x[floor(idx)] + x[ceiling(idx)])/2
+MEDIAN <- function(x) {#we define x 
+  x <- x[order(x)]#we order the values
+  idx <- (length(x)+1)/2#  give the number and order of the values
+  Xme <- (x[floor(idx)] + x[ceiling(idx)])/2# to give the median in case it is not paired numbers
   return(Xme)
 }
+
+MEDIAN(x1)
+
 
 ### create a function that shows the mean (average) of a given vector. 
 
@@ -44,6 +66,7 @@ RANGE <- function(x) {
     return(rng)
 }
 
+RANGE(x2)
 ### Create a function that shows the Interquartile range (IQR) and in parenthesis the 25%-75% values.
 ### You can check the help for the 'quantile' function.
 
