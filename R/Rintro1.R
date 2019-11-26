@@ -7,6 +7,7 @@
 ##########################
 
 ### assign a number to a variable (object)
+
 a <- 10
 
 ### assign a string to a variable (object)
@@ -89,6 +90,7 @@ v6 <- c(1,3,2,3,2,4,1,2,1,1,1,2,1,4,3,4,2,4)
 v6f <- factor(v6, levels=c(1,2,3,4), labels=c("None","Low","Medium","High"))
 
 summary(v6)
+table(v6)
 summary(v6f)
 
 v6
@@ -115,6 +117,8 @@ v8
 # string sequence
 v9 <- letters
 v10 <- LETTERS
+v9
+v10
 v9[5]
 v10[1:3]
 v10[c(5,15,22)] # this is the list of the vactor
@@ -156,8 +160,8 @@ m1 <- matrix(c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4), nrow=4, ncol=4, byrow=FALSE)
 dim(m1)
 m1
 
-## define only the number of rows
-m1 <- matrix(c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4), nrow=4)
+## define only the number of rows.
+m1 <- matrix(c(1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4), nrow=4)# the "byrow" defalt is False 
 dim(m1)
 m1
 
@@ -303,7 +307,7 @@ l4[[2]]
 l4$chrlst
 
 ### retrieving a value from an object in a list
-l4[[2]][[1]][2]   # this will return the character "c" from the second object (chrlst)
+l4[[2]][[1]][2]   # this will return the character "b" from the second object (chrlst)
 
 ### list of lists
 l5 <- list(a1=list(model="2018 Toyota Camry Hybrid", price=32400, mpg=52),
@@ -333,7 +337,7 @@ l5[[3]]$mpg
 l6 <- list(
   vector_list=v5,
   list_list=l5,
-  matrix_list=m3,
+  matrix_list=l3,
   n=6  
 )
 l6
@@ -384,6 +388,7 @@ df
 
 ### deleting parts of the data frame
 df$c <- NULL
+df
 df[,-3] # it delet the values in the column just in the look not realy in contrast to df$c <- NULL 
 
 df[-5,]
@@ -442,7 +447,7 @@ df$mpg <- NULL
 
 set.seed(4)#give random numbers but block it and the number 4 dosent matter
 names.vec <- c('Avi', 'Ben', 'Gad', 'Dan', 'Harel', 'Vered', 'Zelig')
-ages.vec <- sample(25:35, size=7, replace=T)#sample guve each time random numbers.
+ages.vec <- sample(25:35, size=7, replace=T)#sample gives each time random numbers.
 is.married.vec <- sample(c(T, F), size=7, replace=T)
 cities = c('Jerusalem', 'Tel Aviv', 'Haifa')
 city.vec <- sample(cities, size=7, replace=T, prob=c(0.6, 0.3, 0.1))

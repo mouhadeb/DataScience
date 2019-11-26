@@ -84,7 +84,7 @@ summary(s2)
 s3 <- c("I","love","data","science")
 s10 <-c("x1","x2", "x3", "x4")
 s11<-paste("y",paste(s10,colapse="+"),sep = "~")
-
+s11
 
 s4 <- paste(s1,collapse=" ")
 s4
@@ -241,7 +241,7 @@ c == d
 
 cities = c('Jerusalem', 'Tel Aviv', 'Haifa')
 
-'Jerusalem' %in% cities # in order to know if a value is in the vector in boolean
+'Jerusalem' %in% cities # in order to know if a value is in the vector (in boolean)
 'Holon' %in% cities
 
 !('Jerusalem' %in% cities)  ## not in
