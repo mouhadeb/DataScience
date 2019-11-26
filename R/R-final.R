@@ -1,16 +1,22 @@
 
-#### On Linux server:
-library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "Driver={ODBC Driver 17 for SQL Server};server=192.168.1.1;
-database=COLLEGE;uid=dsuser02;
-pwd=DSuser02!", timeout = 10)
+## On Linux server:
+#library(DBI)
+#con <- dbConnect(odbc::odbc(), .connection_string = "Driver={ODBC Driver 17 for SQL Server};server=192.168.1.1;
+#database=COLLEGE;uid=dsuser02;
+#pwd=DSuser02!", timeout = 10)
 
-#### On Windows:
+## On Windows, using the R-DBI package we connect to the DSN and import the "Collage":
 library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "DSN=COLLEGE;Trusted_Connection=yes;", timeout = 10)
+con <- dbConnect(odbc::odbc(), DSN="College;Trusted_Connection=yes;")
 
-## Get the whole table:
-df <- dbReadTable(con, "Classrooms")
+## Geting the whole tables:
+students <- dbReadTable(con, "students")
+teachers <- dbReadTable(con, "teachers")
+classroom <- dbReadTable(con, "classroom")
+courses <- dbReadTable(con, "courses")
+departments <- dbReadTable(con, "departments")
+## Very important to disconnect
+dbDisconnect(con)
 
 library(dplyr)
 

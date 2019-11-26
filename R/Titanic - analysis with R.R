@@ -6,7 +6,7 @@ library(ggplot2)
 
 ### Import the titanic dataset
 
-titanic <- read.csv("../data/titanic.csv")
+titanic <- read.csv("C:/Users/meir/Documents/DataScience/data/titanic.csv")
 head(titanic)
 
 ##################################################
