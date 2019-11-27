@@ -1,30 +1,50 @@
 
-#### On Linux server:
-library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "Driver={ODBC Driver 17 for SQL Server};server=192.168.1.1;
-database=COLLEGE;uid=dsuser02;
-pwd=DSuser02!", timeout = 10)
+## On Linux server:
+#library(DBI)
+#con <- dbConnect(odbc::odbc(), .connection_string = "Driver={ODBC Driver 17 for SQL Server};server=192.168.1.1;
+#database=COLLEGE;uid=dsuser02;
+#pwd=DSuser02!", timeout = 10)
 
-#### On Windows:
+## On Windows, using the R-DBI package we connect to the DSN and import the "Collage":
 library(DBI)
-con <- dbConnect(odbc::odbc(), .connection_string = "DSN=COLLEGE;Trusted_Connection=yes;", timeout = 10)
+con <- dbConnect(odbc::odbc(), DSN="College;Trusted_Connection=yes;")
 
-## Get the whole table:
-df <- dbReadTable(con, "Classrooms")
+## Geting the whole tables:
+students <- dbReadTable(con, "students")
+teachers <- dbReadTable(con, "teachers")
+classroom <- dbReadTable(con, "classroom")
+courses <- dbReadTable(con, "courses")
+departments <- dbReadTable(con, "departments")
+## Very important to disconnect
+dbDisconnect(con)
 
 library(dplyr)
 
 ## Questions
 
-##############
-## Q1. Count the number of students on each department¶
-##############
+#########################################################
+## Q1. Count the number of students on each department ##
+#########################################################
+
+# join courses + classroom + departments
+
+Courses_Classroom_Department <- (classroom %>% 
+  left_join(courses, by="Course_id") %>% 
+  left_join(departments, by = "Department_id"))
+
+# counting the number of students in each department
+
+Sum_Students <- Courses_Classroom_Department %>% 
+  group_by(Department_id,Department_name) %>% 
+  summarise(sum_student=n_distinct(Student_id))
 
 
-##############
-## Q2. How many students have each course of the English department and the 
-##     total number of students in the department?
-##############
+####################################################################################
+## Q2. How many students have each course of the English department and the ########
+##     total number of students in the department?                          ########
+####################################################################################
+
+Courses_Classroom_Department %>% filter(Department_id == "1")
 
 
 ##############
