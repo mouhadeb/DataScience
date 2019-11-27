@@ -22,15 +22,29 @@ library(dplyr)
 
 ## Questions
 
-##############
-## Q1. Count the number of students on each department¶
-##############
+#########################################################
+## Q1. Count the number of students on each department ##
+#########################################################
+
+# join courses + classroom + departments
+
+Courses_Classroom_Department <- (classroom %>% 
+  left_join(courses, by="Course_id") %>% 
+  left_join(departments, by = "Department_id"))
+
+# counting the number of students in each department
+
+Sum_Students <- Courses_Classroom_Department %>% 
+  group_by(Department_id,Department_name) %>% 
+  summarise(sum_student=n_distinct(Student_id))
 
 
-##############
-## Q2. How many students have each course of the English department and the 
-##     total number of students in the department?
-##############
+####################################################################################
+## Q2. How many students have each course of the English department and the ########
+##     total number of students in the department?                          ########
+####################################################################################
+
+Courses_Classroom_Department %>% filter(Department_id == "1")
 
 
 ##############

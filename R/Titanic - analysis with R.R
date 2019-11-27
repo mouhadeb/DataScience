@@ -13,7 +13,7 @@ head(titanic)
 ### Number of pasangers and how much survived
 ##################################################
 passangers = nrow(titanic)# count num of 
-
+passangers
 survived = sum(titanic['Survived'])
 #titanic$Survived  # another way
 print(paste("We have", passangers, "passangers but only", survived, "of them survived (", 
