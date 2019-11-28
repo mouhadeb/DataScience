@@ -26,37 +26,55 @@ library(dplyr)
 ## Q1. Count the number of students on each department ##
 #########################################################
 
-# join courses + classroom + departments
 
-Courses_Classroom_Department <- (classroom %>% 
-  left_join(courses, by="Course_id") %>% 
-  left_join(departments, by = "Department_id"))
-
-# counting the number of students in each department
-
-Sum_Students <- Courses_Classroom_Department %>% 
-  group_by(Department_id,Department_name) %>% 
-  summarise(sum_student=n_distinct(Student_id))
-
+Sum_student_by_depart <- (classroom %>% 
+  left_join(courses, by = "Course_id") %>%  ##### joining courses + classroom 
+  left_join(departments, by = "Department_id")) %>%   ##### joining courses + classroom + departments
+        group_by(Department_id, Department_name) %>%   ##### grouping and counting  the sum students by departments
+        summarise(sum_student=n_distinct(Student_id))
 
 ####################################################################################
 ## Q2. How many students have each course of the English department and the ########
 ##     total number of students in the department?                          ########
 ####################################################################################
 
-Courses_Classroom_Department %>% filter(Department_id == "1")
+Sum_student_english <- (courses %>%   
+  left_join(classroom, by = "Course_id")%>%   ##### joining courses + classroom
+  left_join(departments, by = "Department_id")) %>%  ##### joining courses + classroom + departments
+        filter(Department_id == "1") %>%   ##### selecting the English department
+        group_by(Department_id, Course_id, Course_name) %>%  ##### grouping and counting  the sum students by english courses
+        summarise(Students_In_English_Courses=(count=n()))
+                      
+
+Sum_English <- (courses %>%   
+  left_join(classroom, by = "Course_id")%>%   ##### joining courses + classroom
+  left_join(departments, by = "Department_id")) %>%  ##### joining courses + classroom + departments
+        filter(Department_id == "1") %>%  ##### selecting the English department
+        summarise(Students_In_English=n_distinct(Student_id)) ##### counting the total students
+
+####################################################################################
+## Q3. How many small (<22 students) and large (22+ students) classrooms are #######
+##     needed for the Science department?                                    #######
+####################################################################################
+
+courses_classify <- (courses %>% 
+  left_join(classroom, by = "Course_id")) %>%   ##### joining courses + classroom 
+        group_by(Course_id,Course_name) %>%  ##### grouping the data by courses
+        filter(Department_id == 2) %>%   ##### selecting the science department
+        summarise(Students_Num=n_distinct(Student_id))%>%   ##### counting the number of student in each course
+        mutate(Classification = ifelse(Students_Num>21,"Big",    ##### classify the classes by their size
+                                ifelse(Students_Num<22, "Small"))) %>%
+        group_by(Classification)%>%  ##### grouping by "big" / "small"
+        summarise(count=n()) ##### counting the num of big vs. small classes
 
 
-##############
-## Q3. How many small (<22 students) and large (22+ students) classrooms are 
-##     needed for the Science department?
-##############
+###################################################################################
+## Q4. A feminist student claims that there are more male than female in the  #####
+##     College. Justify if the argument is correct                            #####
+###################################################################################
 
 
-##############
-## Q4. A feminist student claims that there are more male than female in the 
-##     College. Justify if the argument is correct
-##############
+
 
 
 ##############
