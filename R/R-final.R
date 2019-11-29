@@ -74,17 +74,32 @@ courses_classify <- (courses %>%
 ###################################################################################
 
 
+Students_Gender <- students %>% 
+        group_by(Gender) %>% ##### grouping by Gender
+        summarise(count=n())  ##### counting F vs. M
 
 
+####################################################################################
+## Q5. For which courses the percentage of male/female students is over 70%?  ######
+####################################################################################
 
-##############
-## Q5. For which courses the percentage of male/female students is over 70%?
-##############
+
+Classes_by_Gender <- (courses %>% 
+  inner_join(classroom, by = "Course_id") %>% 
+  inner_join(students, by = "Student_id")) %>%
+        group_by(Course_id, Course_name, Gender) %>%
+  summarise(Sum_Gender=n()) %>%      
+  mutate(Percent = Sum_Gender/sum(Sum_Gender)) %>%
+  group_by(Course_id, Course_name, Percent)%>%
+
+  filter(Percent > 0.7)
 
 
 ##############
 ## Q6. For each department, how many students passed with a grades over 80?
 ##############
+
+
 
 
 ##############
