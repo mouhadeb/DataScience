@@ -85,13 +85,13 @@ Students_Gender <- students %>%
 
 
 Classes_by_Gender <- (courses %>% 
-                        inner_join(classroom, by = "Course_id") %>%  
+                        inner_join(classroom, by = "Course_id") %>%  ##### joining the tables
                         inner_join(students, by = "Student_id")) %>%
-  group_by(Course_id, Course_name, Gender) %>%
-  summarise(Sum_Gender=n()) %>%      
-  mutate(Percent = Sum_Gender/sum(Sum_Gender)*100) %>% 
-  group_by(Course_id, Course_name, Percent)  %>%
-  filter(Percent > 70) 
+  group_by(Course_id, Course_name, Gender) %>%  #####grouping 
+  summarise(Sum_Gender=n()) %>%  ##### cointing the number of each gender     
+  mutate(Percent = Sum_Gender/sum(Sum_Gender)*100) %>% ##### creating a new column of the precent
+  group_by(Course_id, Course_name, Percent)  %>%  #####grouping by the course and the percent 
+  filter(Percent > 70) ####selecting the classes over 70%
 
 
 ##################################################################################
@@ -100,11 +100,11 @@ Classes_by_Gender <- (courses %>%
 
 
 Department_Degree80 <- (classroom %>%
-                          left_join(courses, by = "Course_id") %>%
+                          left_join(courses, by = "Course_id") %>% ##### joining tables
                           left_join(departments, by = "Department_id")) %>% 
-  filter(Degree > 80) %>%
-  group_by(Department_id, Department_name) %>% 
-  summarise(Sum_student_over_80=n_distinct(Student_id))
+  filter(Degree > 80) %>%  ##### selecting only the degree over 80
+  group_by(Department_id, Department_name) %>%  ##### grouping
+  summarise(Sum_student_over_80=n_distinct(Student_id)) ##### summing the students with degree over 80
 
 ##################################################################################
 ## Q7. For each department, how many students passed with a grades under 60?  ####
@@ -113,11 +113,11 @@ Department_Degree80 <- (classroom %>%
 
 
 Department_Degree60 <- (classroom %>%
-                          left_join(courses, by = "Course_id") %>%
+                          left_join(courses, by = "Course_id") %>% ##### joining tables
                           left_join(departments, by = "Department_id")) %>% 
-  filter(Degree <60) %>%
-  group_by(Department_id, Department_name) %>% 
-  summarise(Sum_student_under_60=n_distinct(Student_id))
+  filter(Degree <60) %>% ##### selecting only the degree under 60
+  group_by(Department_id, Department_name) %>%  ##### grouping
+  summarise(Sum_student_under_60=n_distinct(Student_id)) ##### summing the students with degree under 60
 
 
 ##################################################################################
@@ -127,11 +127,11 @@ Department_Degree60 <- (classroom %>%
 
 
 Teachers_degree <- (classroom %>% 
-                      left_join(courses, by = "Course_id") %>% 
+                      left_join(courses, by = "Course_id") %>%  ##### joining tables
                       left_join(teachers, by = "Teacher_id")) %>%
-  group_by(Teacher_id, First_name, Last_name) %>% 
-  summarise(Teacher_mean_degree=mean(Degree, na.rm = T)) %>%
-  arrange(desc(Teacher_mean_degree))
+  group_by(Teacher_id, First_name, Last_name) %>% #####grouping 
+  summarise(Teacher_mean_degree=mean(Degree, na.rm = T)) %>% ##### calculating the mean degree
+  arrange(desc(Teacher_mean_degree)) ##### ordering by descending
 
 
 ########################################################################################
@@ -142,11 +142,11 @@ Teachers_degree <- (classroom %>%
 
 
 df <- (classroom %>% 
-          left_join(courses, by = "Course_id") %>%
+          left_join(courses, by = "Course_id") %>% ##### joining tables
           left_join(teachers, by = "Teacher_id") %>%
           left_join(departments, by = "Department_id")) %>%
   group_by(Course_id, Course_name, Department_id, Department_name, First_name, Last_name) %>% 
-  summarise(Sum_student_in_class=n_distinct(Student_id)) 
+  summarise(Sum_student_in_class=n_distinct(Student_id))  ##### counting the students in classes
 
 
 ########################################################################################
@@ -158,26 +158,25 @@ df <- (classroom %>%
 
 
 df1 <- (students %>% 
-          inner_join(classroom, by = "Student_id") %>%
+          inner_join(classroom, by = "Student_id") %>%  #####joining tables
           inner_join(courses, by = "Course_id")) %>%
-  group_by(Student_id, First_name, Last_name) %>% 
-  summarise(Sum_courses=n(),Total_mean=mean(Degree, na.rm = T)) 
+  group_by(Student_id, First_name, Last_name) %>%  ##### grouping
+  summarise(Sum_courses=n(),Total_mean=mean(Degree, na.rm = T))  ##### calculating the sum and totla mean of each student
 
   
 df2 <- (students %>% 
-          inner_join(classroom, by = "Student_id") %>%
+          inner_join(classroom, by = "Student_id") %>% #####joining tables
           inner_join(courses, by = "Course_id") %>%
           inner_join(departments, by = "Department_id")) %>% 
-  group_by(Student_id, First_name, Last_name, Department_name) %>%
-  summarise(Class_mean=mean(Degree, na.rm = T))
+  group_by(Student_id, First_name, Last_name, Department_name) %>% ##### grouping
+  summarise(Class_mean=mean(Degree, na.rm = T))  ##### calculating mean of each department
 
+library(tidyr) ##### running the library in order to change columns into rows
 
-library(tidyr)
-
-df3 <- (df1 %>% 
+df3 <- (df1 %>%    #####joining table df1 + df2
           inner_join(df2, by = c("Student_id","First_name","Last_name"))) %>%
-  group_by (Student_id, First_name, Last_name,Sum_courses,Total_mean) %>% 
-  spread(key = Department_name, value = Class_mean)
+  group_by (Student_id, First_name, Last_name, Sum_courses, Total_mean) %>% ##### grouping all the columns that do not change when we convert the table
+  spread(key = Department_name, value = Class_mean) ##### using "spread" we convert the table. 
 
   
   
